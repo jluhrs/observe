@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+// Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 // For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 package observe.web.server.http4s
@@ -10,10 +10,10 @@ import java.security.Security
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
-import scala.concurrent.duration._
-import cats.effect._
-import cats.effect.syntax.all._
-import cats.syntax.all._
+import scala.concurrent.duration.*
+import cats.effect.*
+import cats.effect.syntax.all.*
+import cats.syntax.all.*
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.Appender
 import fs2.Stream
@@ -33,8 +33,8 @@ import org.http4s.server.websocket.WebSocketBuilder2
 import org.http4s.server.middleware.Metrics
 import org.http4s.server.middleware.{Logger => Http4sLogger}
 import pureconfig._
-import observe.model.config._
-import observe.model.events._
+import observe.model.config.*
+import observe.model.events.*
 import observe.server
 import observe.server.CaServiceInit
 import observe.server.ObserveEngine
@@ -44,7 +44,7 @@ import observe.server.Systems
 import observe.server.executeEngine
 import observe.server.tcs.GuideConfigDb
 import observe.web.server.OcsBuildInfo
-import observe.web.server.config._
+import observe.web.server.config.*
 import observe.web.server.logging.AppenderForClients
 import observe.web.server.security.AuthenticationService
 import web.server.common.LogInitialization
@@ -317,8 +317,9 @@ object WebServerLauncher extends IOApp with LogInitialization {
   /** Reads the configuration and launches the observe */
   override def run(args: List[String]): IO[ExitCode] =
     observe.guaranteeCase {
-      case ExitCode.Success => IO.unit
-      case e                => IO(Console.println(s"Exit code $e")) // scalastyle:off console.io
+      case Outcome.Errored(e) =>
+        IO(Console.println(s"Observe exited with error $e")) // scalastyle:off console.io
+      case _                  => IO.unit
     }
 
 }
